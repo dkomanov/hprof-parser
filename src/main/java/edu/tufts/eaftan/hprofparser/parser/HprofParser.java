@@ -74,31 +74,37 @@ public class HprofParser {
      *   [u1]* - body
      */
 
-    FileInputStream fs = new FileInputStream(file);
-    DataInputStream in = new DataInputStream(new BufferedInputStream(fs));
+    String format;
+    int idSize;
+    long startTime;
+    try (
+      FileInputStream fs = new FileInputStream(file);
+      DataInputStream in = new DataInputStream(new BufferedInputStream(fs));
+    ) {
+      // header
+      format = readUntilNull(in);
+      idSize = in.readInt();
+      startTime = in.readLong();
+      handler.header(format, idSize, startTime);
 
-    // header
-    String format = readUntilNull(in);
-    int idSize = in.readInt();
-    long startTime = in.readLong();
-    handler.header(format, idSize, startTime);
+      // records
+      boolean done;
+      do {
+        done = parseRecord(in, idSize, true);
+      } while (!done);
+    }
 
-    // records
-    boolean done;
-    do {
-      done = parseRecord(in, idSize, true);
-    } while (!done);
-    in.close();
+    try (
+      FileInputStream fs = new FileInputStream(file);
+      DataInputStream in = new DataInputStream(new BufferedInputStream(fs));
+    ) {
+      in.skipBytes(format.length() + 1 + 4 + 8); // skip header (1 for null terminator)
+      boolean done;
+      do {
+        done = parseRecord(in, idSize, false);
+      } while (!done);
+    }
 
-    FileInputStream fsSecond = new FileInputStream(file);
-    DataInputStream inSecond = new DataInputStream(new BufferedInputStream(fsSecond));
-    readUntilNull(inSecond); // format
-    inSecond.readInt(); // idSize
-    inSecond.readLong(); // startTime
-    do {
-      done = parseRecord(inSecond, idSize, false);
-    } while (!done);
-    inSecond.close();
     handler.finished();
   }
 
