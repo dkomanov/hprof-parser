@@ -124,6 +124,25 @@ public interface RecordHandler {
   public abstract void primArrayDump(long objId, int stackTraceSerialNum, byte elemType,
       Value<?>[] elems);
 
+  default void primObjectArrayDump(long objId, int stackTraceSerialNum, long[] elems) {
+  }
+  default void primArrayDump(long objId, int stackTraceSerialNum, boolean[] elems) {
+  }
+  default void primArrayDump(long objId, int stackTraceSerialNum, char[] elems) {
+  }
+  default void primArrayDump(long objId, int stackTraceSerialNum, short[] elems) {
+  }
+  default void primArrayDump(long objId, int stackTraceSerialNum, int[] elems) {
+  }
+  default void primArrayDump(long objId, int stackTraceSerialNum, float[] elems) {
+  }
+  default void primArrayDump(long objId, int stackTraceSerialNum, byte[] elems) {
+  }
+  default void primArrayDump(long objId, int stackTraceSerialNum, double[] elems) {
+  }
+  default void primArrayDump(long objId, int stackTraceSerialNum, long[] elems) {
+  }
+
   public abstract void finished();
 
 }

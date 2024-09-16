@@ -700,55 +700,78 @@ public class HprofParser {
         bytesRead += arraySizeBytes;
 
         if (isFirstPass) {
-          Value<?>[] vs = new Value[i2];
           switch (t) {
-            case OBJ:
+            case OBJ: {
+              long[] vs = new long[i2];
               for (int i=0; i<vs.length; i++) {
-                vs[i] = new Value<>(t, readId(idSize, in));
+                vs[i] = readId(idSize, in);
               }
+              handler.primObjectArrayDump(l1, i1, vs);
               break;
-            case BOOL:
+            }
+            case BOOL: {
+              boolean[] vs = new boolean[i2];
               for (int i=0; i<vs.length; i++) {
-                vs[i] = new Value<>(t, in.readBoolean());
+                vs[i] = in.readBoolean();
               }
+              handler.primArrayDump(l1, i1, vs);
               break;
-            case CHAR:
+            }
+            case CHAR:{
+              char[] vs = new char[i2];
               for (int i=0; i<vs.length; i++) {
-                vs[i] = new Value<>(t, in.readChar());
+                vs[i] = in.readChar();
               }
+              handler.primArrayDump(l1, i1, vs);
               break;
-            case FLOAT:
+            }
+            case FLOAT:{
+              float[] vs = new float[i2];
               for (int i=0; i<vs.length; i++) {
-                vs[i] = new Value<>(t, in.readFloat());
+                vs[i] = in.readFloat();
               }
+              handler.primArrayDump(l1, i1, vs);
               break;
-            case DOUBLE:
+            }
+            case DOUBLE: {
+              double[] vs = new double[i2];
               for (int i=0; i<vs.length; i++) {
-                vs[i] = new Value<>(t, in.readDouble());
+                vs[i] = in.readDouble();
               }
+              handler.primArrayDump(l1, i1, vs);
               break;
-            case BYTE:
+            }
+            case BYTE: {
+              byte[] vs = new byte[i2];
+              in.readFully(vs);
+              handler.primArrayDump(l1, i1, vs);
+              break;
+            }
+            case SHORT: {
+              short[] vs = new short[i2];
               for (int i=0; i<vs.length; i++) {
-                vs[i] = new Value<>(t, in.readByte());
+                vs[i] = in.readShort();
               }
+              handler.primArrayDump(l1, i1, vs);
               break;
-            case SHORT:
+            }
+            case INT: {
+              int[] vs = new int[i2];
               for (int i=0; i<vs.length; i++) {
-                vs[i] = new Value<>(t, in.readShort());
+                vs[i] = in.readInt();
               }
+              handler.primArrayDump(l1, i1, vs);
               break;
-            case INT:
+            }
+            case LONG: {
+              long[] vs = new long[i2];
               for (int i=0; i<vs.length; i++) {
-                vs[i] = new Value<>(t, in.readInt());
+                vs[i] = in.readLong();
               }
+              handler.primArrayDump(l1, i1, vs);
               break;
-            case LONG:
-              for (int i=0; i<vs.length; i++) {
-                vs[i] = new Value<>(t, in.readLong());
-              }
-              break;
+            }
           }
-          handler.primArrayDump(l1, i1, b1, vs);
         } else {
           skipBytesSafe(in, arraySizeBytes);
         }
