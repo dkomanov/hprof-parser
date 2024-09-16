@@ -789,25 +789,4 @@ public class HprofParser {
 
     return id;
   }
-
- 
-  /* Utility */
-
-  private int mySkipBytes(int n, DataInput in) throws IOException {
-    int bytesRead = 0;
-    
-    try {
-      while (bytesRead < n) {
-        in.readByte();
-        bytesRead++;
-      }
-    } catch (EOFException e) {
-      // expected
-    }
-    
-    return bytesRead;
-  }
-
-
 }
-
